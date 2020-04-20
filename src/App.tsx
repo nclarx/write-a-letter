@@ -4,7 +4,6 @@ import './App.css'
 import Postcard               from './components/Postcard'
 import useAuthState           from './hooks/UseAuthState'
 import useObservable          from './hooks/UseObservable'
-import logo                   from './logo.svg'
 import { ImageMeta }          from './models/imageMeta'
 import AuthService            from './services/AuthService'
 import { getImageCollection } from './services/ImageMetaService'
@@ -17,6 +16,10 @@ function App() {
 
     const handleLogin = () => {
         AuthService.login()
+    }
+
+    const handleLogout = () => {
+        AuthService.logout()
     }
 
     const renderCardList = () => (
@@ -34,30 +37,17 @@ function App() {
     )
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <Button onClick={() => handleLogin()} variant={'outlined'}>
-                    Login
-                </Button>
-                {
-                    auth && renderCardList()
-                }
-                <p>
-                    Edit <code> src/App.tsx</code>
-                    and save to reload.
-                </p>
-                < a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn
-                    React
-                </a>
-            </header>
-        </div>
+        <main className="App">
+            <Button onClick={() => handleLogout()} variant={'outlined'}>
+                Logout
+            </Button>
+            <Button onClick={() => handleLogin()} variant={'outlined'}>
+                Login
+            </Button>
+            {
+                auth && renderCardList()
+            }
+        </main>
     )
 }
 

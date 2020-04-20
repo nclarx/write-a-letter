@@ -1,7 +1,7 @@
-import { User }            from 'firebase'
-import { auth }            from 'firebase/app'
+import { User }                              from 'firebase'
+import { auth }                              from 'firebase/app'
 import 'firebase/auth'
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject, from, Observable } from 'rxjs'
 
 class AuthService {
 
@@ -11,18 +11,23 @@ class AuthService {
         this.authState = new BehaviorSubject<User | undefined | null>(undefined)
     }
 
-    login() {
+    public login(): Observable<User | null> {
         const provider = new auth.GoogleAuthProvider()
-        return new Promise((resolve, reject) => {
+        return from(
             auth().signInWithPopup(provider)
-                  .then((user) => {
-                      localStorage.setItem('AUTH_FB', JSON.stringify(user))
+                  .then((userCredential) => {
+                      localStorage.setItem('AUTH_FB', JSON.stringify(userCredential))
                       this.setAuthStateListener()
+                      return userCredential.user || null
                   })
-        })
+        )
     }
 
-    setAuthStateListener() {
+    public logout(): Observable<void> {
+        return from(auth().signOut())
+    }
+
+    private setAuthStateListener() {
         auth().onAuthStateChanged((user => this.authState.next(user)))
     }
 }
