@@ -6,14 +6,13 @@ import useAuthState           from './hooks/UseAuthState'
 import useObservable          from './hooks/UseObservable'
 import logo                   from './logo.svg'
 import { ImageMeta }          from './models/imageMeta'
-import { environment }        from './react-app-env'
 import AuthService            from './services/AuthService'
 import { getImageCollection } from './services/ImageMetaService'
 
 function App() {
     const auth = useAuthState()
     const postcards = useObservable<ImageMeta[]>(
-        getImageCollection(environment.postcardsPath)
+        getImageCollection(process.env.REACT_APP_IMAGE_SET_PATH || 'path/to/imageSet')
     )
 
     const handleLogin = () => {
