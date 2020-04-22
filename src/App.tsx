@@ -8,17 +8,16 @@ import {
     Theme,
     Toolbar,
     Typography
-}                             from '@material-ui/core'
-import { makeStyles }         from '@material-ui/core/styles'
-import { AccountCircle }      from '@material-ui/icons'
-import React                  from 'react'
+}                        from '@material-ui/core'
+import { makeStyles }    from '@material-ui/core/styles'
+import { AccountCircle } from '@material-ui/icons'
+import { observer }      from 'mobx-react'
+import React             from 'react'
 import './App.css'
-import Postcard               from './components/Postcard'
-import useAuthState           from './hooks/UseAuthState'
-import useObservable          from './hooks/UseObservable'
-import { ImageMeta }          from './models/imageMeta'
-import AuthService            from './services/AuthService'
-import { getImageCollection } from './services/ImageMetaService'
+import ImageMetaList     from './components/ImageMetaList'
+import useAuthState      from './hooks/UseAuthState'
+import AuthService       from './services/AuthService'
+import ImageMetaStore    from './stores/ImageMetaStore'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,16 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 )
 
-function App() {
+const App = observer(() => {
 
     const classes = useStyles()
     const auth = useAuthState()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
 
-    const postcards = useObservable<ImageMeta[]>(
-        getImageCollection(process.env.REACT_APP_IMAGE_SET_PATH || 'path/to/imageSet')
-    )
+    const postcards = ImageMetaStore.metaCollection
 
     const handleLogin = () => {
         AuthService.login()
@@ -53,19 +50,6 @@ function App() {
         AuthService.logout()
     }
 
-    const renderCardList = () => (
-        <section>
-            <ul>
-                {
-                    postcards && postcards.map((card, idx) => (
-                        <div key={idx}>
-                            <Postcard postcard={card} />
-                        </div>
-                    ))
-                }
-            </ul>
-        </section>
-    )
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
@@ -120,13 +104,11 @@ function App() {
             </AppBar>
             <Container>
                 <main className="App">
-                    {
-                        renderCardList()
-                    }
+                    <ImageMetaList imageMeta={ImageMetaStore.metaCollection} />
                 </main>
             </Container>
         </>
     )
-}
+})
 
 export default App

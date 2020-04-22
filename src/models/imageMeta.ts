@@ -9,5 +9,5 @@ export interface ImageMeta {
     path: string;
     width: number;
     side: string;
-    imgRef: Observable<string>;
+    imgRef?: Observable<string>;
 }
