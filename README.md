@@ -6,6 +6,10 @@ see if it can produce something more light-weight and modular.
 
 I also wanted a testing ground to see how RxJS and React play together.
 
+## Updates
+
+- 2020-04-21: started playing with MobX on the `test/mobx` branch to see whether it's better than using RxJS
+
 ## Usage
 
 This app won't work unless you have a Firebase Firestore database with metadata relating to images that are stored in
