@@ -1,32 +1,44 @@
-import { Observable }  from 'rxjs'
+import { Subscription } from 'rxjs'
 import {
     catchError,
     filter,
-    map
-}                      from 'rxjs/operators'
-import { ImageMeta }   from '../models/imageMeta'
-import FirebaseService from './FirebaseService'
+    map,
+    tap
+}                       from 'rxjs/operators'
+import { ImageMeta }    from '../models/imageMeta'
+import ImageMetaStore   from '../stores/ImageMetaStore'
+import FirebaseService  from './FirebaseService'
 
-export const getImageCollection = (collectionName: string): Observable<ImageMeta[]> => {
-    return FirebaseService
-        .getAll<ImageMeta>(collectionName)
-        .pipe(
-            filter(items => !!items),
-            map((items) => items
-                .map((item) => {
-                    return {
-                        ...item,
-                        imgRef: FirebaseService.getPathToAsset(`${item.path}/${item.filename}`)
-                    }
+class ImageMetaService {
+
+    imageMetaCollection: ImageMeta[] | undefined
+
+    constructor() {
+    }
+
+    public getImageCollection(collectionName: string): Subscription {
+        console.log('getImageCollection called')
+        return FirebaseService
+            .getAll<ImageMeta>(collectionName)
+            .pipe(
+                tap((data) => console.log('Tap: ', data)),
+                filter(items => !!items),
+                map((items) => items
+                    .forEach((item) => {
+                        console.log('Item', item)
+                        ImageMetaStore.addToMetaCollection({
+                            ...item,
+                            imgRef: FirebaseService.getPathToAsset(`${item.path}/${item.filename}`)
+                        })
+                    })
+                ),
+                catchError((error, caught$) => {
+                    console.error('Error retrieving image collection:', error)
+                    return caught$
                 })
-            ),
-            map((items) => {
+            ).subscribe()
+    }
 
-                return items
-            }),
-            catchError((error, caught$) => {
-                console.error('Error retrieving image collection:', error)
-                return caught$
-            })
-        )
 }
+
+export default new ImageMetaService()

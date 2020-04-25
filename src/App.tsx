@@ -12,12 +12,16 @@ import {
 import { makeStyles }    from '@material-ui/core/styles'
 import { AccountCircle } from '@material-ui/icons'
 import { observer }      from 'mobx-react'
-import React             from 'react'
+import React, {
+    useEffect,
+    useState
+}                        from 'react'
 import './App.css'
 import ImageMetaList     from './components/ImageMetaList'
 import useAuthState      from './hooks/UseAuthState'
+import { ImageMeta }     from './models/imageMeta'
 import AuthService       from './services/AuthService'
-import ImageMetaStore    from './stores/ImageMetaStore'
+import ImageMetaService  from './services/ImageMetaService'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,7 +44,16 @@ const App = observer(() => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
 
-    const postcards = ImageMetaStore.metaCollection
+    const
+        [imageMeta, setImageMeta] = useState<ImageMeta[] | undefined>()
+
+    useEffect(() => {
+        console.log('Effect is run')
+        const imageMetaSubscription = ImageMetaService.getImageCollection(process.env.REACT_APP_IMAGE_SET_PATH || '')
+        console.log(ImageMetaService)
+        setImageMeta(ImageMetaService.imageMetaCollection)
+        return () => imageMetaSubscription.unsubscribe()
+    }, [])
 
     const handleLogin = () => {
         AuthService.login()
@@ -104,7 +117,7 @@ const App = observer(() => {
             </AppBar>
             <Container>
                 <main className="App">
-                    <ImageMetaList imageMeta={ImageMetaStore.metaCollection} />
+                    <ImageMetaList imageMeta={imageMeta} />
                 </main>
             </Container>
         </>

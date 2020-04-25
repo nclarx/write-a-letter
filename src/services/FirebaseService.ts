@@ -1,7 +1,12 @@
-import * as firebase                             from 'firebase/app'
+import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/storage'
-import { BehaviorSubject, from, Observable, of } from 'rxjs'
+import {
+    BehaviorSubject,
+    from,
+    Observable,
+    of
+}                    from 'rxjs'
 
 class FirebaseService {
 
@@ -27,6 +32,7 @@ class FirebaseService {
                         document.forEach(
                             (doc) =>
                                 collection.push(doc.data() as T))
+                        console.log('Collection', collection)
                         collection$.next(collection)
                     })
         return collection$

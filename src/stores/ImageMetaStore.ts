@@ -3,7 +3,6 @@ import {
     computed,
     observable
 }                    from 'mobx'
-import { of }        from 'rxjs'
 import { ImageMeta } from '../models/imageMeta'
 
 class ImageMetaStore {
@@ -16,20 +15,20 @@ class ImageMetaStore {
         this.pendingRequests = 0
         autorun(() => console.log(this.getAllImageMeta))
 
-        setInterval(() => {
-            this.addToMetaCollection({
-                id: 'sdfsdf',
-                filename: 'dfjskjfsd.jpg',
-                height: 1000,
-                oldFilename: 'sfksdfj.jpg',
-                pairId: 123,
-                path: 'sdlfj/3dsfdsf/443',
-                width: 1000,
-                side: 'front',
-                imgRef: of('Hello')
-            })
-            console.log(this.metaCollection)
-        }, 3000)
+        // setInterval(() => {
+        //     this.addToMetaCollection({
+        //         id: 'sdfsdf',
+        //         filename: 'dfjskjfsd.jpg',
+        //         height: 1000,
+        //         oldFilename: 'sfksdfj.jpg',
+        //         pairId: 123,
+        //         path: 'sdlfj/3dsfdsf/443',
+        //         width: 1000,
+        //         side: 'front',
+        //         imgRef: of('Hello')
+        //     })
+        //     console.log(this.metaCollection)
+        // }, 3000)
 
 
     }
@@ -45,6 +44,7 @@ class ImageMetaStore {
     }
 
     public addToMetaCollection(meta: ImageMeta) {
+        console.log(`Image meta added to store: ${meta}`)
         this.metaCollection.push(meta)
     }
 
