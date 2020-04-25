@@ -9,6 +9,7 @@ I also wanted a testing ground to see how RxJS and React play together.
 ## Updates
 
 - 2020-04-21: started playing with MobX on the `test/mobx` branch to see whether it's better than using RxJS
+- 2020-04-25: kind of have an unholy union of MobX and RxJS going on `test/mobx`, need to look at how the store will handle me updating items in an array and whether that causes too many re-renders
 
 ## Usage
 
