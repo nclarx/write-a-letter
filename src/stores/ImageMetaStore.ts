@@ -33,10 +33,11 @@ class ImageMetaStore {
 
     }
 
-    @computed get getAllImageMeta(): ImageMeta[] | undefined {
+    @computed get getAllImageMeta(): ImageMeta[] {
         if (this.metaCollection.length > 0) {
             return this.metaCollection
         }
+        return []
     }
 
     @computed get getCountOfImageMeta(): number {
@@ -44,7 +45,7 @@ class ImageMetaStore {
     }
 
     public addToMetaCollection(meta: ImageMeta) {
-        console.log(`Image meta added to store: ${meta}`)
+        console.log(`Image meta added to store:`, meta)
         this.metaCollection.push(meta)
     }
 

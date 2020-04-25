@@ -1,7 +1,7 @@
-import { observer }  from 'mobx-react'
-import React         from 'react'
-import { ImageMeta } from '../models/imageMeta'
-import Postcard      from './Postcard'
+import { observer }         from 'mobx-react'
+import React, { useEffect } from 'react'
+import { ImageMeta }        from '../models/imageMeta'
+import Postcard             from './Postcard'
 
 interface ImageMetaListProps {
     imageMeta: ImageMeta[] | undefined
@@ -11,6 +11,9 @@ const ImageMetaList = observer((props: ImageMetaListProps): JSX.Element => {
 
     const imageMeta = props.imageMeta
 
+    useEffect(() => {
+        console.log('Meta list in component: ', imageMeta)
+    }, [imageMeta])
     const renderCardList = () => (
         <section>
             <ul>

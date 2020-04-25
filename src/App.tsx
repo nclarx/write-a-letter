@@ -11,17 +11,18 @@ import {
 }                        from '@material-ui/core'
 import { makeStyles }    from '@material-ui/core/styles'
 import { AccountCircle } from '@material-ui/icons'
-import { observer }      from 'mobx-react'
+import { observer }     from 'mobx-react'
 import React, {
     useEffect,
     useState
-}                        from 'react'
+}                       from 'react'
 import './App.css'
-import ImageMetaList     from './components/ImageMetaList'
-import useAuthState      from './hooks/UseAuthState'
-import { ImageMeta }     from './models/imageMeta'
-import AuthService       from './services/AuthService'
-import ImageMetaService  from './services/ImageMetaService'
+import ImageMetaList    from './components/ImageMetaList'
+import useAuthState     from './hooks/UseAuthState'
+import { ImageMeta }    from './models/imageMeta'
+import AuthService      from './services/AuthService'
+import ImageMetaService from './services/ImageMetaService'
+import ImageMetaStore   from './stores/ImageMetaStore'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,9 +49,7 @@ const App = observer(() => {
         [imageMeta, setImageMeta] = useState<ImageMeta[] | undefined>()
 
     useEffect(() => {
-        console.log('Effect is run')
         const imageMetaSubscription = ImageMetaService.getImageCollection(process.env.REACT_APP_IMAGE_SET_PATH || '')
-        console.log(ImageMetaService)
         setImageMeta(ImageMetaService.imageMetaCollection)
         return () => imageMetaSubscription.unsubscribe()
     }, [])
@@ -117,7 +116,7 @@ const App = observer(() => {
             </AppBar>
             <Container>
                 <main className="App">
-                    <ImageMetaList imageMeta={imageMeta} />
+                    <ImageMetaList imageMeta={ImageMetaStore.getAllImageMeta} />
                 </main>
             </Container>
         </>
