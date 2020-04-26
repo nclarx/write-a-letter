@@ -2,10 +2,11 @@ import {
     createStyles,
     makeStyles,
     Theme
-}                    from '@material-ui/core/styles'
-import React         from 'react'
-import useObservable from '../hooks/UseObservable'
+}                      from '@material-ui/core/styles'
+import React, {useRef} from 'react'
+import useObservable   from '../hooks/UseObservable'
 import { ImageMeta } from '../models/imageMeta'
+import ImageViewer   from "./ImageViewer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -20,7 +21,6 @@ interface PostcardProps {
 }
 
 const Postcard = (props: PostcardProps) => {
-
     const classes = useStyles()
 
     const postcard = {...props.postcard}
@@ -36,7 +36,8 @@ const Postcard = (props: PostcardProps) => {
            
             {
                 imageUrl && (
-                    <img className={classes.image} alt={postcard.filename} src={imageUrl} />
+                    // <img className={classes.image} alt={postcard.filename} src={imageUrl} />
+                    <ImageViewer imageUrl={imageUrl} />
                 )
             }
         </div>
